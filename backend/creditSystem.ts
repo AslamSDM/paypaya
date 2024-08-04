@@ -1,9 +1,14 @@
 // get transaction counts for all the chains in 
 
-import {getTransactionCount,getWalletReputation,getPOAP,getUniswap} from "./creditSystem_helpers"
-
+import {getTransactionCount,getWalletReputation,getPOAP,getUniswap,getAICreditScore} from "./creditSystem_helpers"
+import { setAttestation } from "./onchain_helpers"
 const chains=["eth","optimism","base","mode"]
-const creditScoreCalculator=async(addr:string)=>{
+
+interface CreditReturn {
+    "creditWorthiness": string,
+    "creditScore": string
+}
+const creditScoreCalculator=async(addr:string):Promise<CreditReturn|string>=>{
 
     let creditParams={
         number_of_transaction_on_ethereum_chain:0, 
@@ -39,8 +44,15 @@ creditParams.reputation_score_on_mode_chain=reputationScores[3]
 // ask an ai model to give a credit worthiness
 console.log({creditParams})
 //Make an attestation based on the ai response (optional to do here)
+const credit = await getAICreditScore(creditParams)
+if (credit){
 
+    setAttestation(addr,credit)
+return credit}
+else
+return "Error fetching creditScore"
 // return creditWorthiness & credit score
+
 
 }
 

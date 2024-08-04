@@ -8,8 +8,8 @@ import {
     BASE_MAINNET_CREATION,
     MODE_MAINNET_CREATION
 } from "./getChainCredentials";
-
-
+import openAI, { OpenAI } from "openai"
+import { SYSTEM_PROMPT } from "./utils/promts";
 const GOLDSKY_SUBGRAPH_URL = "https://api.goldsky.com/api/public/project_clzekg9bg0txc01x8d5seagkd/subgraphs/poap-subgraph/1.0.0/gn"
 interface WalletInfo {
     block_number_balance_updated_at: number;
@@ -59,6 +59,25 @@ interface UniswapData {
     }
 }
 
+
+interface CreditParams {
+
+    number_of_transaction_on_ethereum_chain: number,
+    number_of_transaction_on_optimism_chain: number,
+    number_of_transaction_on_mode_chain: number,
+    number_of_transaction_on_base_chain: number,
+    reputation_score_on_ethereum_chain: number,
+    reputation_score_on_optimism_chain: number,
+    reputation_score_on_mode_chain: number,
+    reputation_score_on_base_chain: number,
+    number_of_interactions_with_uniswap: number,
+    number_of_poap_nft: number
+}
+
+interface CreditReturn {
+    "creditWorthiness": string,
+    "creditScore": string
+}
 const getChainLinkForTransactions = (chain: string) => {
     switch (chain) {
         case 'eth':
@@ -92,7 +111,8 @@ const getChainLinkForCreation = (chain: string) => {
 
 
 export async function getPOAP(addr: string): Promise<number> {
-try{    const query = ` query MyQuery {
+    try {
+        const query = ` query MyQuery {
         account(id: "${addr}") {
           tokens(first: 1000) {
             id
@@ -107,21 +127,22 @@ try{    const query = ` query MyQuery {
         }
       }`
 
-    const response = await fetch(GOLDSKY_SUBGRAPH_URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ query }),
-    });
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
+        const response = await fetch(GOLDSKY_SUBGRAPH_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ query }),
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
-    const result = await response.json() as QueryResponse;
-   if( result.data.account == null) return 0
-    return result.data.account.tokens.length}catch(e){
-        console.log(e) 
+        const result = await response.json() as QueryResponse;
+        if (result.data.account == null) return 0
+        return result.data.account.tokens.length
+    } catch (e) {
+        console.log(e)
         return 0
     }
 
@@ -228,6 +249,19 @@ export async function getWalletReputation(addr: string, chain: string): Promise<
     }
 }
 
+export async function getAICreditScore(credit_params: CreditParams): Promise<CreditReturn | undefined> {
+    const openAI = new OpenAI({ apiKey: "" }) // change to our own
+    const query = ``
+    const stream = await openAI.chat.completions.create(
+        {
+            model: 'gpt-4o-mini',
+            messages: [{ role: "system", content: SYSTEM_PROMPT }, { role: "user", content: JSON.stringify(credit_params) }],
+            stream: false
+        }
+    )
+    if (stream.choices[0].message.content != null)
+        return JSON.parse(stream.choices[0].message.content) as CreditReturn
+}
 
 
 export const getTransactionCount = async (addr: string, chain: string): Promise<TransactionCounts> => {

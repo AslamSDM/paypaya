@@ -251,7 +251,6 @@ export async function getWalletReputation(addr: string, chain: string): Promise<
 
 export async function getAICreditScore(credit_params: CreditParams): Promise<CreditReturn | undefined> {
     const openAI = new OpenAI({ apiKey: "" }) // change to our own
-    const query = ``
     const stream = await openAI.chat.completions.create(
         {
             model: 'gpt-4o-mini',

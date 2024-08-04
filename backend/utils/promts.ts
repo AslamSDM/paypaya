@@ -25,6 +25,6 @@ export const SYSTEM_PROMPT= `You are my credit worthiness calculation AI agent y
     creditWorthiness:"$amount in credits",
     creditScore:"numerical creditscore you obtained"
     }
-
+    strictly make sure that the credit score is not a decimal it should be an integer whole number
     strictly respond in this format not intro notes no outdro notes. just this JSON
     `

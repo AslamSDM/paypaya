@@ -1,13 +1,15 @@
 import express from 'express';
 import { Twilio, twiml } from 'twilio';
 import bodyParser from 'body-parser';
+import { config } from 'dotenv';
 
 const app = express();
 const port = 3000;
 
 // Twilio credentials
-const accountSid = 'YOUR_ACCOUNT_SID';
-const authToken = 'YOUR_AUTH_TOKEN';
+const accountSid = process.env.TWILIO_SSID;
+
+const authToken = process.env.TWILIO_TOKEN;
 
 const client = new Twilio(accountSid, authToken);
 

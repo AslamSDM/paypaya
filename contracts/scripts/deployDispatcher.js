@@ -1,7 +1,7 @@
 const hre = require("hardhat");
 
 async function main() {
-  const Disptcher = await hre.ethers.deployContract("Dispatcher",["0xF8008eE43984a532e28A80C0a5e5bfad0f5c89b7"]);
+  const Disptcher = await hre.ethers.deployContract("Dispatcher",["0x378883c3CB137f18a1d3Fc32385cd76f952139E3"]);
 
   await Disptcher.waitForDeployment();
 

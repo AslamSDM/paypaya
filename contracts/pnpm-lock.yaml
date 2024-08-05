@@ -14,6 +14,9 @@ importers:
       '@openzeppelin/contracts':
         specifier: ^4.2.0
         version: 4.9.6
+      crypto:
+        specifier: ^1.0.1
+        version: 1.0.1
       dotenv:
         specifier: ^16.4.1
         version: 16.4.5
@@ -24,6 +27,9 @@ importers:
       '@nomicfoundation/hardhat-toolbox':
         specifier: ^4.0.0
         version: 4.0.0(di4cbjfhbxh5maoxrb62ifsaz4)
+      '@nomicfoundation/hardhat-verify':
+        specifier: ^2.0.9
+        version: 2.0.9(hardhat@2.22.7(ts-node@10.9.2(@types/node@22.0.0)(typescript@5.5.4))(typescript@5.5.4))
 
 packages:
 
@@ -761,6 +767,10 @@ packages:
 
   crypt@0.0.2:
     resolution: {integrity: sha512-mCxBlsHFYh9C+HVpiEacem8FEBnMXgU9gy4zmNC+SXAZNB/1idgp/aulFJ4FgCi7GPEVbfyng092GqL2k2rmow==}
+
+  crypto@1.0.1:
+    resolution: {integrity: sha512-VxBKmeNcqQdiUQUW2Tzq0t377b54N2bMtXO/qiLa+6eRRmmC4qT3D4OnTGoT/U6O9aklQ/jTwbOtRMTTY8G0Ig==}
+    deprecated: This package is no longer supported. It's now a built-in Node module. If you've depended on crypto, you should switch to the one that's built-in.
 
   death@1.1.0:
     resolution: {integrity: sha512-vsV6S4KVHvTGxbEcij7hkWRv0It+sGGWVOM67dQde/o5Xjnr+KmLjxWJii2uEObIrt1CcM9w0Yaovx+iOlIL+w==}
@@ -2920,6 +2930,8 @@ snapshots:
   create-require@1.1.1: {}
 
   crypt@0.0.2: {}
+
+  crypto@1.0.1: {}
 
   death@1.1.0: {}
 

@@ -10,7 +10,15 @@ import {
 } from "./getChainCredentials";
 import openAI, { OpenAI } from "openai"
 import { SYSTEM_PROMPT } from "./utils/promts";
-const GOLDSKY_SUBGRAPH_URL = "https://api.goldsky.com/api/public/project_clzekg9bg0txc01x8d5seagkd/subgraphs/poap-subgraph/1.0.0/gn"
+
+
+const GOLDSKY_SUBGRAPH_URL_POAP = "https://api.goldsky.com/api/public/project_clzekg9bg0txc01x8d5seagkd/subgraphs/poap-subgraph/1.0.0/gn"
+const GOLDSKY_SUBGRAPH_URL_UNISWAP = "https://api.goldsky.com/api/public/project_clzekg9bg0txc01x8d5seagkd/subgraphs/uniswapCredibility/1.0.0/gn"
+const GOLDSKY_SUBGRAPH_URL_AAVE = "https://api.goldsky.com/api/public/project_clzekg9bg0txc01x8d5seagkd/subgraphs/aaveCredibility/1.0.0/gn"
+const GOLDSKY_SUBGRAPH_URL_SUSHI = "https://api.goldsky.com/api/public/project_clzekg9bg0txc01x8d5seagkd/subgraphs/sushiCredibility/1.0.0/gn"
+const GOLDSKY_SUBGRAPH_URL_ONEINCH = "https://api.goldsky.com/api/public/project_clzekg9bg0txc01x8d5seagkd/subgraphs/oneinchCredibility/1.0.0/gn"
+
+
 interface WalletInfo {
     block_number_balance_updated_at: number;
     coin_balance: string;
@@ -59,7 +67,16 @@ interface UniswapData {
     }
 }
 
-
+interface aaveUserTransactions {
+    "data": {
+        "userTransactions": []
+    }
+}
+interface oneinchUserTransactions {
+    "data": {
+        "swapeds": []
+    }
+}
 interface CreditParams {
 
     number_of_transaction_on_ethereum_chain: number,
@@ -127,7 +144,7 @@ export async function getPOAP(addr: string): Promise<number> {
         }
       }`
 
-        const response = await fetch(GOLDSKY_SUBGRAPH_URL, {
+        const response = await fetch(GOLDSKY_SUBGRAPH_URL_POAP, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -150,41 +167,56 @@ export async function getPOAP(addr: string): Promise<number> {
 }
 
 export async function getUniswap(addr: string): Promise<number> {
-    try {
-        const query = `query MyQuery {
-  swaps(first: 100, where: {sender: "${addr}"}) {
-    id
-  }
-}`
-        const url_base = `https://gateway-arbitrum.network.thegraph.com/api/b26b587206a49efaa156b16fb6f76cda/subgraphs/id/HMuAwufqZ1YCRmzL2SfHTVkzZovC9VL2UAKhjvRqKiR1`
-        const url_mainnet = `https://gateway-arbitrum.network.thegraph.com/api/b26b587206a49efaa156b16fb6f76cda/subgraphs/id/HUZDsRpEVP2AvzDCyzDHtdc64dyDxx8FQjzsmqSg4H3B`
-        const response_base = await fetch(url_base, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ query }),
-        });
-        if (!response_base.ok) {
-            throw new Error(`HTTP error! status: ${response_base.status}`);
-        }
+    const queries = {
+        uniswap: `query { swaps(first: 100, where: {sender: "${addr}"}) { id } }`,
+        aave: `query { userTransactions(first: 100, where: {user: "${addr}"}) { user } }`,
+        sushi: `query { swaps(first: 100, where: {sender: "${addr}"}) { id } }`, // Same as Uniswap
+        oneinch: `query { swapeds(where: {sender: "${addr}"}) { sender } }`
+    };
 
-        const response_mainnet = await fetch(url_mainnet, {
+    const endpoints = [
+        { url: GOLDSKY_SUBGRAPH_URL_UNISWAP, query: queries.uniswap },
+        { url: GOLDSKY_SUBGRAPH_URL_AAVE, query: queries.aave },
+        { url: GOLDSKY_SUBGRAPH_URL_SUSHI, query: queries.sushi },
+        { url: GOLDSKY_SUBGRAPH_URL_ONEINCH, query: queries.oneinch } 
+    ];
+
+    const fetchPromises = endpoints.map(({ url, query }) =>
+        fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ query }),
-        });
-        if (!response_mainnet.ok) {
-            throw new Error(`HTTP error! status: ${response_mainnet.status}`);
-        }
-        const result_mainnet = await response_mainnet.json() as UniswapData;
-        const result_base = await response_base.json() as UniswapData;
-        console.log({ result_mainnet })
-        console.log({ result_base })
-        return (result_mainnet.data.swaps.length + result_base.data.swaps.length)
-    } catch (e) { console.log(e); return 0 }
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query })
+        }).then(response => {
+            console.log(url)
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        }).catch(e => {
+            console.error(e);
+            return { data: { swaps: [], userTransactions: [], swapeds: [] } }; // Return empty data on error
+        })
+    );
+
+    try {
+        const results = await Promise.all(fetchPromises)  as [
+            UniswapData ,
+             aaveUserTransactions ,
+             UniswapData ,
+            oneinchUserTransactions 
+        ];
+        return results.reduce((total, result, index) => {
+            
+            if (index === 0) return total + results[0].data.swaps.length; // Uniswap
+            if (index === 1) return total + results[1].data.userTransactions.length; // Aave
+            if (index === 2) return total + results[2].data.swaps.length; // Sushi
+            if (index === 3) return total + results[3].data.swapeds.length; // OneInch
+            return total;
+        }, 0);
+    } catch (e) {
+        console.error(e);
+        return 0;
+    }
 }
 
 async function getWalletInfo(addr: string, chain: string): Promise<WalletInfo> {

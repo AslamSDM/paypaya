@@ -2,6 +2,7 @@
 backend/node_modules/*
 frontend/node_modules/*
 contracts/node_modules/*
+contracts/artifacts/*
 node_modules/
 # Ignore all .log files
 *.log

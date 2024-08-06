@@ -24,7 +24,7 @@ export const setAttestation = async (addr: string, credit_parameters: CreditRetu
         console.log({credit_worthiness})
         console.log({credit_score})
         const easContractAddress = "0x4200000000000000000000000000000000000021";
-        const schemaUID = "0x4b2f0e6f8056a48e3f028c538d2d2ed88f0846ec147c3497c8af29f6c494fdef";
+        const schemaUID = "0x6f307df2f1d1ae69a0134121fc5cb246ba3cdb182940efef71700ce55bcc8211";
         const eas = new EAS(easContractAddress);
         // Signer must be an ethers-like signer.
         // const signer = provider.getSigner()
@@ -43,7 +43,7 @@ export const setAttestation = async (addr: string, credit_parameters: CreditRetu
                 recipient: addr,
                 //@ts-ignore
                 expirationTime: 0,
-                revocable: true, // Be aware that if your schema is not revocable, this MUST be false
+                revocable: false, // Be aware that if your schema is not revocable, this MUST be false
                 data: encodedData,
             },
         });

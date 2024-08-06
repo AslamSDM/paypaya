@@ -120,8 +120,8 @@ module.exports = {
         network: "metal",
         chainId: 1740,
         urls: {
-          apiURL: "https://optimism-sepolia.blockscout.com/api",
-          browserURL: "https://optimism-sepolia.blockscout.com/",
+          apiURL: "https://testnet.explorer.metall2.com/api",
+          browserURL: "https://testnet.explorer.metall2.com/",
         }
       }
     ]

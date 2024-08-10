@@ -34,3 +34,12 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
+Base USDC Token Address	0x49b26d8D6Fef9A3Ed91E663E01Aa91D16fE6ddC5	Verified	https://base-sepolia.blockscout.com/address/0x49b26d8D6Fef9A3Ed91E663E01Aa91D16fE6ddC5				
+Optimism USDC Token Address	0x9A33eF90660321a8aeAfDca271d594d5b052E2DE	Verified	https://optimism-sepolia.blockscout.com/address/0x9A33eF90660321a8aeAfDca271d594d5b052E2DE				
+Mode USDC Token Address	0x378883c3CB137f18a1d3Fc32385cd76f952139E3	Verified	https://sepolia.explorer.mode.network/token/0x378883c3CB137f18a1d3Fc32385cd76f952139E3				
+Celo Alfajores USDC Token Address	0x378883c3CB137f18a1d3Fc32385cd76f952139E3	Verified	https://celo-dango.blockscout.com/address/0x378883c3CB137f18a1d3Fc32385cd76f952139E3				
+cel2 USDC Token Address	0x378883c3CB137f18a1d3Fc32385cd76f952139E3	Verified	https://celo-dango.blockscout.com/address/0x378883c3CB137f18a1d3Fc32385cd76f952139E3				
+Metal USDC Token Address	0x378883c3CB137f18a1d3Fc32385cd76f952139E3	Verified	https://testnet.explorer.metall2.com/address/0x378883c3CB137f18a1d3Fc32385cd76f952139E3?tab=contract				
+Fraxtal USDC 	0x4c825a52d6a77d22dc38Da3A09F15708547EB26D		https://fraxscan.com/address/0x4c825a52d6a77d22dc38Da3A09F15708547EB26D#code				

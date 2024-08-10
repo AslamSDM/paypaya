@@ -1,41 +1,62 @@
 import express from 'express';
-import { Twilio, twiml } from 'twilio';
 import bodyParser from 'body-parser';
-import { config } from 'dotenv';
+import { ethers } from 'ethers';
+import Dispatcherabi from '../contracts/artifacts/contracts/Dispatcher.sol/Dispatcher.json'
+import USDCabi from '../contracts/artifacts/contracts/USDC.sol/USDC.json
+import { supabase } from './db/supabase';
+import jwt from 'jsonwebtoken';
 
 const app = express();
 const port = 3000;
 
-// Twilio credentials
-const accountSid = process.env.TWILIO_SSID;
-
-const authToken = process.env.TWILIO_TOKEN;
-
-const client = new Twilio(accountSid, authToken);
-
-// Middleware to parse incoming requests
+const provider = new ethers.JsonRpcProvider('https://rpc-mumbai.maticvigil.com');
+const wallet = new ethers.Wallet(process.env.PRIVATE_KEY ?? "", provider);
+const signer = wallet.connect(provider);
+const dispatcher = new ethers.Contract(process.env.DISPATCHER_CONTRACT ?? "", Dispatcherabi.abi, signer);
+const USDC = new ethers.Contract(process.env.USDC_CONTRACT ?? "", USDCabi, signer);
 app.use(bodyParser.urlencoded({ extended: false }));
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+app.post('/sms', async (req, res) => {
+  console.log('Received SMS:', req.body);
 
-app.post('/sms', (req, res) => {
-  const { Body, From, To, MessageSid } = req.body;
+  const { sender, content, msgId, rcvd } = req.body;
+  const contentjson = JSON.parse(content);
+  console.log('Received SMS:', contentjson);
 
-  // Convert SMS data to JSON
-  const smsJson = {
-    body: Body,
-    from: From,
-    to: To,
-    messageSid: MessageSid,
-    receivedAt: new Date().toISOString(),
-  };
+  switch (contentjson.type) {
+    case "send":
+      const to = contentjson.to;
+      const amount = ethers.parseUnits(contentjson.amount, 6)
+      const fromaddress_data = await supabase.from('users').select('address').eq('phone', sender).single()
+      const toaddress_data = await supabase.from('users').select('address').eq('phone', to).single()
+      if (fromaddress_data.error || toaddress_data.error) {
+        return res.send('User not found');
+      }
+      const approval = await USDC.allowance(fromaddress_data.data.address, process.env.DISPATCHER_CONTRACT ?? "");
+      if (approval.lt(amount)) return res.send('Insufficient balance');
+      const from = fromaddress_data.data.address;
+      const toaddress = toaddress_data.data.address;
+      const tx = dispatcher.send(from, toaddress, amount).then((tx) => {
+        console.log('Transaction:', tx);
+        return res.send('Transaction sent');
+      });
+      await supabase.from('transactions').insert([{ from: from, to: to, amount: amount.toString(), status: "pending" }])
 
-  console.log('Received SMS:', JSON.stringify(smsJson, null, 2));
-
-  // Send a response back to Twilio
-  const twimlResponse = new twiml.MessagingResponse();
-  twimlResponse.message('SMS received and processed.');
-
-  res.writeHead(200, { 'Content-Type': 'text/xml' });
-  res.end(twimlResponse.toString());
+      break;
+    case "verify":
+      const msgId = contentjson.msgId;
+      if (!contentjson.token) {
+        return res.send('Token not found');
+      }
+      const token = jwt.verify(contentjson?.token, process.env.JWT_SECRET ?? "");
+      const { error } = await supabase.from('users').update({ address: token.address }).eq('phone', sender);
+      if (error) {
+        return res.send('Error updating user');
+      }
+      return res.send('User updated successfully');
+  }
 });
 
 app.listen(port, () => {

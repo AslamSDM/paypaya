@@ -1,34 +1,50 @@
 "use client";
 import { FC } from 'react'
-import { IDKitWidget, VerificationLevel, ISuccessResult } from '@worldcoin/idkit'
+import { VerificationLevel, IDKitWidget, useIDKit } from "@worldcoin/idkit";
+import type { ISuccessResult } from "@worldcoin/idkit";
+import { verify } from "@/app/actions/worldIDVerify";
 
 const WorldIDVerifyBtn: FC = () => {
 
-    const onSuccess = () => {
-        // This is where you should perform any actions after the modal is closed
-        // Such as redirecting the user to a new page
-        alert("Huraaaaah Success")
+    const app_id = process.env.NEXT_PUBLIC_WLD_APP_ID as `app_${string}`;
+    const action = process.env.NEXT_PUBLIC_WLD_ACTION;
+
+    if (!app_id) {
+        throw new Error("app_id is not set in environment variables!");
+    }
+    if (!action) {
+        throw new Error("action is not set in environment variables!");
+    }
+
+    const { setOpen } = useIDKit();
+
+    const onSuccess = (result: ISuccessResult) => {
+        // This is where you should perform frontend actions once a user has been verified, such as redirecting to a new page
+        window.alert(
+            "Successfully verified with World ID! Your nullifier hash is: " +
+            result.nullifier_hash
+        );
     };
 
-    const handleVerify = async (proof: ISuccessResult) => {
-        const res = await fetch("/api/verifyWorldCoin", { // route to your backend will depend on implementation
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(proof),
-        })
-        if (!res.ok) {
-            throw new Error("Verification failed."); // IDKit will display the error message to the user in the modal
+    const handleProof = async (result: ISuccessResult) => {
+        console.log(
+            "Proof received from IDKit, sending to backend:\n",
+            JSON.stringify(result)
+        ); // Log the proof from IDKit to the console for visibility
+        const data = await verify(result);
+        if (data.success) {
+            console.log("Successful response from backend:\n", JSON.stringify(data)); // Log the response from our backend for visibility
+        } else {
+            throw new Error(`Verification failed: ${data.detail}`);
         }
     };
 
     return (
         <IDKitWidget
-            app_id="app_staging_5e32fecc3a83581ebf68c2b46432826b" // obtained from the Developer Portal
-            action="verify" // obtained from the Developer Portal
+            app_id={app_id} // obtained from the Developer Portal
+            action={action} // obtained from the Developer Portal
             onSuccess={onSuccess} // callback when the modal is closed
-            handleVerify={handleVerify} // callback when the proof is received
+            handleVerify={handleProof} // callback when the proof is received
             verification_level={VerificationLevel.Orb}
         >
             {({ open }) =>

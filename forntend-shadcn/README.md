@@ -41,5 +41,7 @@ Optimism USDC Token Address	0x9A33eF90660321a8aeAfDca271d594d5b052E2DE	Verified	
 Mode USDC Token Address	0x378883c3CB137f18a1d3Fc32385cd76f952139E3	Verified	https://sepolia.explorer.mode.network/token/0x378883c3CB137f18a1d3Fc32385cd76f952139E3				
 Celo Alfajores USDC Token Address	0x378883c3CB137f18a1d3Fc32385cd76f952139E3	Verified	https://celo-dango.blockscout.com/address/0x378883c3CB137f18a1d3Fc32385cd76f952139E3				
 cel2 USDC Token Address	0x378883c3CB137f18a1d3Fc32385cd76f952139E3	Verified	https://celo-dango.blockscout.com/address/0x378883c3CB137f18a1d3Fc32385cd76f952139E3				
-Metal USDC Token Address	0x378883c3CB137f18a1d3Fc32385cd76f952139E3	Verified	https://testnet.explorer.metall2.com/address/0x378883c3CB137f18a1d3Fc32385cd76f952139E3?tab=contract				
+Metal USDC Token Address	0x378883c3CB137f18a1d3Fc32385cd76f952139E3	Verified	https://testnet.explorer.metall2.com/address/0x378883c3CB137f18a1d3Fc32385cd76f952139E3?tab=contract		
+
+
 Fraxtal USDC 	0x4c825a52d6a77d22dc38Da3A09F15708547EB26D		https://fraxscan.com/address/0x4c825a52d6a77d22dc38Da3A09F15708547EB26D#code				

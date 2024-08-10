@@ -46,7 +46,6 @@ app.post('/sms', async (req, res) => {
 
       break;
     case "verify":
-      const msgId = contentjson.msgId;
       if (!contentjson.token) {
         return res.send('Token not found');
       }

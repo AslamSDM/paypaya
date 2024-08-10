@@ -53,7 +53,7 @@ module.exports = {
       'baseSepolia': "abc",
       'sepolia': "abc",
       'alfajores': "abc",
-      'fraxtal': "abc",
+      'fraxtal': "9HDXFK1Z8HPRBT7UM9A1Z7ZD5BGRYHNFWV",
       'cel2': "abc",
      'metal': "abc"
 
@@ -112,8 +112,8 @@ module.exports = {
         network: "fraxtal",
         chainId: 252,
         urls: {
-          apiURL: "https://optimism-sepolia.blockscout.com/api",
-          browserURL: "https://optimism-sepolia.blockscout.com/",
+          apiURL: "https://api.fraxscan.com/api",
+          browserURL: "https://fraxscan.com/",
         }
       },
       {

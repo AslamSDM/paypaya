@@ -9,8 +9,8 @@ export default function Home() {
   return (
     // <GetStarted />
     // <Connect />
-    // <Login />
+    <Login />
     // <VerifyOTP />
-    <Wallet />
+    // <Wallet />
   );
 }

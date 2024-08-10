@@ -32,6 +32,7 @@ contract Loan {
         uint256 credit_worthiness;
         uint256 credit_available;
     }
+
     mapping(address => userDetails) public address_to_user;
     mapping(address => loanDetails[]) public user_to_loan_mapping; // each loan will be having an id which can be used to track the specifc loan that is going to be repayed
 
@@ -218,3 +219,8 @@ contract Loan {
         return  user_to_loan_mapping[user][id];
     }
 }
+
+
+//dispatcher contract => approval 10000000
+
+// loan contract => update creditworthiness

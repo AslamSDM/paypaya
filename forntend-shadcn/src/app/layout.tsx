@@ -2,6 +2,10 @@ import type { Metadata, Viewport } from "next";
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils"
 import { ThirdwebProvider } from "thirdweb/react";
+import { config } from "./../../config";
+import { cookieToInitialState } from "@account-kit/core";
+import { headers } from "next/headers";
+import { Providers } from "./providers";
 
 import "@/styles/globals.css";
 import "@/styles/index.css";
@@ -12,10 +16,10 @@ const fontSans = FontSans({
   variable: "--font-sans",
 })
 
-const APP_NAME = "PWA App";
-const APP_DEFAULT_TITLE = "My Awesome PWA App";
-const APP_TITLE_TEMPLATE = "%s - PWA App";
-const APP_DESCRIPTION = "Best PWA app in the world!";
+const APP_NAME = "Paypaya";
+const APP_DEFAULT_TITLE = "Paypaya";
+const APP_TITLE_TEMPLATE = "%s - Payment app";
+const APP_DESCRIPTION = "Enter new era of crypto payments";
 
 export const metadata: Metadata = {
   applicationName: APP_NAME,
@@ -62,6 +66,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const initialState = cookieToInitialState(
+    config,
+    headers().get("cookie") ?? undefined
+  );
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
@@ -72,7 +81,9 @@ export default function RootLayout({
         )}
       >
         <main className="dark">
+        <Providers initialState={initialState}>
           <ThirdwebProvider>{children}</ThirdwebProvider>
+          </Providers>
         </main>
       </body>
     </html>

@@ -23,18 +23,7 @@ import { Input } from "@/components/ui/input"
 
 const countryCodes = {
   India: "+91",
-  US: "+1",
-  Africa: "+231",
-  Inda: "+91776",
-  U: "+14565",
-  Arica: "+2313534",
-  Indi: "+91565",
-  USewgr: "+1565",
-  Africalgijero: "+23156y45",
-  sgerg: "erg",
-  asfef: "frg",
-  asfefrg: "erger",
-  egergre: "erge"
+  US: "+1"
 }
 
 const countries = Object.keys(countryCodes);

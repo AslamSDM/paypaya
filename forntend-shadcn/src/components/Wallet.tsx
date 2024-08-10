@@ -18,6 +18,10 @@ const Wallet: FC = () => {
 
     const [showQr, setShowQr] = useState<Boolean>(false);
 
+    const handleCopy = () => {
+        if (typeof window !== "undefined") navigator.clipboard.writeText(data.address)
+    }
+
     return (
         <div className="flex flex-col justify-center items-center w-screen min-h-screen select-none py-[50px]">
             <div className="flex flex-col items-center border h-fit w-[95%] md:w-[80%] lg:w-[40%] border-[#ffffff15] bg-[rgba(31,31,31,0.1)] rounded-[10px] text-white pb-[40px]">
@@ -25,7 +29,7 @@ const Wallet: FC = () => {
                     <div className="flex justify-around items-center bg-[#c4c4c417] px-[10px] rounded-b-[5px]">
                         <div className="text-[1.em]">{shortAddress(data.address)}</div>
                         <div className="p-[6px]">
-                            <img className="h-[25px] cursor-pointer" onClick={() => { navigator.clipboard.writeText(data.address) }} src="/copy.svg" alt="" />
+                            <img className="h-[25px] cursor-pointer" onClick={handleCopy} src="/copy.svg" alt="" />
                         </div>
 
                     </div>

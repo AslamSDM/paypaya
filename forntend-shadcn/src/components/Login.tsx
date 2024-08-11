@@ -51,9 +51,23 @@ const Login = () => {
 
   const handleClick = async () => {
     //update supabase for email and phonenumber mapping
+    const message = await getMessage();
     openAuthModal()
 
   }
+  const getMessage = async () => {
+    const response = await fetch('/api/phone/verify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      // body: JSON.stringify({ address: user.address })
+    }
+    );
+    const data = await response.json();
+    console.log(data);
+    return data.message;
+  } 
 
   return (
     <>

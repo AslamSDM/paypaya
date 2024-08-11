@@ -1,14 +1,60 @@
 "use client";
-
+import { encodeFunctionData,parseUnits } from 'viem'
+import {abi as abiUSDC } from "./../app/abis/USDC.json"
+import {abi as abiVault} from "./../app/abis/Vault.json"
 import { useState } from "react"
 import { Input } from "@/components/ui/input"
-
+import React from "react";
+import {
+  type UseSendUserOperationResult,
+  useSendUserOperation,
+  useSmartAccountClient,
+} from "@account-kit/react";
+import { encode } from 'punycode';
+ 
 const LoanInput = () => {
 
   const [lendAmount, setLendAmount] = useState<string>("");
-
+  const [depositSuccess, setDepositSuccess] = useState<boolean>(false);
+  const { client } = useSmartAccountClient({ type: "LightAccount" });
+ 
+  const { sendUserOperation, isSendingUserOperation } = useSendUserOperation({
+    client
+,
+    // optional parameter that will wait for the transaction to be mined before returning
+    waitForTxn: true,
+    onSuccess: ({ hash, request }) => {
+      setDepositSuccess(true)
+    },
+    onError: (error) => {
+     console.log(error)
+    },
+  });
   const handleLend = () => {
-    // Handle Lend Here
+    const dataApprovevUSDC = encodeFunctionData({
+      abi: abiVault,
+      functionName: 'approve',
+      args: ['0xE63a7C8843116B4476c1979e4d072041c241A80A',parseUnits(lendAmount,18)]
+    })
+
+    const dataGetloan = encodeFunctionData({
+      abi: abiVault,
+      functionName: 'dispatchLoan',
+      args: [parseUnits(lendAmount,18),3]
+    })
+
+    sendUserOperation({
+      uo: [
+        {
+          target: "0xE63a7C8843116B4476c1979e4d072041c241A80A",
+          data: dataApprovevUSDC
+        },
+        {
+          target: "0xE63a7C8843116B4476c1979e4d072041c241A80A",
+          data: dataGetloan
+        },
+      ],
+    })
   }
 
   return (

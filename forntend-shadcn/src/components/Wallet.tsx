@@ -3,6 +3,7 @@
 import { FC, useState } from "react";
 import QRCode from "react-qr-code";
 import { INetwork, networks } from "@/lib/networks";
+import { useRouter } from "next/navigation";
 
 import {
     DropdownMenu,
@@ -23,6 +24,8 @@ const data = {
 }
 
 const Wallet: FC = () => {
+
+    const router = useRouter()
 
     const [showQr, setShowQr] = useState<Boolean>(false);
     const [network, setNetwork] = useState<INetwork>(networks[0]);
@@ -87,8 +90,8 @@ const Wallet: FC = () => {
                 </div>
                 <div className="flex w-[50%] mt-[20px]">
                     <div className="flex justify-center w-full
-                     text-white items-center px-[20px] py-[10px] bg-[#335fff] hover:bg-[#335fff89] rounded-[25px] font-bold text-[1.2em] cursor-pointer" onClick={() => { setShowQr(!showQr) }}>
-                        Lend
+                     text-white items-center px-[20px] py-[10px] bg-[#335fff] hover:bg-[#335fff89] rounded-[25px] font-bold text-[1.2em] cursor-pointer" onClick={() => { router.push('/loan') }}>
+                        Loan
                     </div>
                 </div>
             </div>

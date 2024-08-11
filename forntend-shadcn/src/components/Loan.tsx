@@ -12,11 +12,9 @@ const data = {
     }
 }
 
-const Lend: FC = () => {
+const Loan: FC = () => {
 
     const router = useRouter()
-    router.push('/connect');
-
 
     return (
         <div className="flex flex-col justify-center items-center w-screen min-h-screen select-none py-[50px]">
@@ -40,7 +38,7 @@ const Lend: FC = () => {
                 </div>
                 <div className="flex w-[50%] mt-[20px]">
                     <div className="flex justify-center w-full
-                     text-white items-center px-[20px] py-[10px] bg-[#335fff] hover:bg-[#335fff89] rounded-[25px] font-bold text-[1.2em] cursor-pointer" onClick={() => { }}>
+                     text-white items-center px-[20px] py-[10px] bg-[#335fff] hover:bg-[#335fff89] rounded-[25px] font-bold text-[1.2em] cursor-pointer" onClick={() => { router.push('loan-input') }}>
                         Lend
                     </div>
                 </div>
@@ -51,7 +49,7 @@ const Lend: FC = () => {
                 </div>
                 <div className="flex w-[50%] mt-[20px]">
                     <div className="flex justify-center w-full
-                     text-white items-center px-[20px] py-[10px] bg-[#335fff] hover:bg-[#335fff89] rounded-[25px] font-bold text-[1.2em] cursor-pointer" onClick={() => { }}>
+                     text-white items-center px-[20px] py-[10px] bg-[#335fff] hover:bg-[#335fff89] rounded-[25px] font-bold text-[1.2em] cursor-pointer" onClick={() => { router.push('/connect') }}>
                         Connect
                     </div>
                 </div>
@@ -60,4 +58,4 @@ const Lend: FC = () => {
     )
 }
 
-export default Lend;
+export default Loan;

@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Input } from "@/components/ui/input"
 
-const LendInput = () => {
+const LoanInput = () => {
 
   const [lendAmount, setLendAmount] = useState<string>("");
 
@@ -39,4 +39,4 @@ const LendInput = () => {
   );
 }
 
-export default LendInput;
+export default LoanInput;

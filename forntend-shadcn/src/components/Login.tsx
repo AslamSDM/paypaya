@@ -25,6 +25,9 @@ const countryCodes = {
   Africa: "+231",
 }
 
+import { useRouter } from "next/navigation";
+
+
 const countries = Object.keys(countryCodes);
 const codes = Object.values(countryCodes);
 
@@ -34,7 +37,7 @@ const Login = () => {
   const [phoneNo, setPhoneNumber] = useState<string>("");
   const [email, setEmail] = useState<string>("")
 
-
+  const router = useRouter()
   const [message, setMessage] = useState();
 
   const user = useUser();
@@ -55,7 +58,8 @@ const Login = () => {
 
   useEffect(() => {
     if (user) {
-      getMessage(user.address);
+      // getMessage(user.address);
+      if(user.address) router.push('/wallet')
     }
   }, [])
 

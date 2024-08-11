@@ -59,10 +59,9 @@ const Login = () => {
 
   useEffect(() => {
     if (user) {
-      // getMessage(user.address);
+      getMessage(user.address);
       updateWallet("isLogined", true);
       if(user.address) router.push('/wallet');
-      
     }
   }, [])
 

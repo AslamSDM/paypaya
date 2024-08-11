@@ -8,7 +8,13 @@ interface CreditReturn {
     "creditWorthiness": string,
     "creditScore": string
 }
-const creditScoreCalculator=async(addr:string):Promise<CreditReturn|string>=>{
+
+interface inputProps{
+    addr:string,
+    isWorldID_verified:boolean,
+    isFarcaster_verified:boolean
+}
+export const creditScoreCalculator=async(props:inputProps):Promise<CreditReturn|string>=>{
 
     let creditParams={
         number_of_transaction_on_ethereum_chain:0, 
@@ -20,19 +26,21 @@ const creditScoreCalculator=async(addr:string):Promise<CreditReturn|string>=>{
         reputation_score_on_mode_chain:0,
         reputation_score_on_base_chain:0,
         number_of_interactions_with_uniswap:0,
-        number_of_poap_nft:0
+        number_of_poap_nft:0,
+        isWorldID_verified:props.isWorldID_verified,
+        isFarcaster_verified:props.isFarcaster_verified
     }
     // get teh total assets holding on superchains
     const transactionCounts= await Promise.all(
-        chains.map(chain => getTransactionCount(addr, chain))
+        chains.map(chain => getTransactionCount(props.addr, chain))
     );
 
-    const reputationScores = await Promise.all(chains.map(chain =>getWalletReputation(addr,chain)))
+    const reputationScores = await Promise.all(chains.map(chain =>getWalletReputation(props.addr,chain)))
 
 // get the interactions with reputed protocols like uniswap, aave and poap using goldsky etc etc
 
-creditParams.number_of_interactions_with_uniswap = await getUniswap(addr);
-creditParams.number_of_poap_nft = await getPOAP(addr);
+creditParams.number_of_interactions_with_uniswap = await getUniswap(props.addr);
+creditParams.number_of_poap_nft = await getPOAP(props.addr);
 creditParams.number_of_transaction_on_base_chain = transactionCounts[2].transactionCount
 creditParams.number_of_transaction_on_ethereum_chain = transactionCounts[0].transactionCount
 creditParams.number_of_transaction_on_optimism_chain = transactionCounts[1].transactionCount
@@ -47,7 +55,7 @@ console.log({creditParams})
 const credit = await getAICreditScore(creditParams)
 if (credit){
 
-    setAttestation(addr,credit)
+    // setAttestation(addr,credit)
 return credit}
 else
 return "Error fetching creditScore"
@@ -56,4 +64,4 @@ return "Error fetching creditScore"
 
 }
 
-creditScoreCalculator("0x94C0e474f0532a5271f00aFe16B59D1031FeBfae")
+// creditScoreCalculator("0x94C0e474f0532a5271f00aFe16B59D1031FeBfae")

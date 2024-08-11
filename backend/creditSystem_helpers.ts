@@ -88,7 +88,9 @@ interface CreditParams {
     reputation_score_on_mode_chain: number,
     reputation_score_on_base_chain: number,
     number_of_interactions_with_uniswap: number,
-    number_of_poap_nft: number
+    number_of_poap_nft: number,
+    isWorldID_verified:boolean,
+    isFarcaster_verified:boolean
 }
 
 interface CreditReturn {

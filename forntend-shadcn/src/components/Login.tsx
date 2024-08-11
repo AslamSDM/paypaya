@@ -23,16 +23,6 @@ const countryCodes = {
   India: "+91",
   US: "+1",
   Africa: "+231",
-  Inda: "+91776",
-  U: "+14565",
-  Arica: "+2313534",
-  Indi: "+91565",
-  USewgr: "+1565",
-  Africalgijero: "+23156y45",
-  sgerg: "erg",
-  asfef: "frg",
-  asfefrg: "erger",
-  egergre: "erge"
 }
 
 const countries = Object.keys(countryCodes);
@@ -53,6 +43,7 @@ const Login = () => {
     //update supabase for email and phonenumber mapping
     const message = await getMessage();
     openAuthModal()
+    //update supabase for email and phonenumber mapping
 
   }
   const getMessage = async () => {
@@ -128,7 +119,7 @@ const Login = () => {
               </div>
               <button
                 className="flex justify-center text-white items-center bg-[#335fff] w-[75%] max-w-[300px] py-[15px] font-bold rounded-[25px] my-[40px] cursor-pointer"
-                onClick={handleClick}
+                onClick={()=>{handleClick()}}
               >
                 Sign In
               </button>

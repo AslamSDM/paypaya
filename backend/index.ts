@@ -5,6 +5,7 @@ import Dispatcherabi from '../contracts/artifacts/contracts/Dispatcher.sol/Dispa
 import USDCabi from '../contracts/artifacts/contracts/USDC.sol/USDC.json
 import { supabase } from './db/supabase';
 import jwt from 'jsonwebtoken';
+import { creditScoreCalculator } from './creditSystem';
 
 const app = express();
 const port = 3000;
@@ -49,8 +50,8 @@ app.post('/sms', async (req, res) => {
       if (!contentjson.token) {
         return res.send('Token not found');
       }
-      const token = jwt.verify(contentjson?.token, process.env.JWT_SECRET ?? "");
-      const { error } = await supabase.from('users').update({ address: token.address }).eq('phone', sender);
+      // const token = jwt.verify(contentjson?.token, process.env.JWT_SECRET ?? "");
+      const { error } = await supabase.from('users').update({ address: contentjson.token,isVerified:true }).eq('phone', sender);
       if (error) {
         return res.send('Error updating user');
       }
@@ -58,6 +59,14 @@ app.post('/sms', async (req, res) => {
   }
 });
 
+app.get('/credit',async (req,res)=>{
+  const {address} = req.query;
+  if(!address) return res.send('Address not found');
+
+  const credit  = await creditScoreCalculator(address as string);
+  return res.send(credit);
+  
+})
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

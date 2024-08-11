@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({
     message: JSON.stringify({
       type: "verify",
-      token: token,
+      token: address,
     }),
   });
 }

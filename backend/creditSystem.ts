@@ -8,7 +8,7 @@ interface CreditReturn {
     "creditWorthiness": string,
     "creditScore": string
 }
-const creditScoreCalculator=async(addr:string):Promise<CreditReturn|string>=>{
+export const creditScoreCalculator=async(addr:string):Promise<CreditReturn|string>=>{
 
     let creditParams={
         number_of_transaction_on_ethereum_chain:0, 

@@ -1,8 +1,22 @@
-import { FC, useState } from "react";
+"use client"
+import { FC, useState ,useEffect} from "react";
 import { useRouter } from 'next/navigation'
+import { getContract } from "thirdweb";
+import { baseSepolia } from "thirdweb/chains";
+import { useReadContract } from "thirdweb/react";
+import { createThirdwebClient } from "thirdweb";
+ 
+import {
+    useAuthModal,
+    useLogout,
+    useSignerStatus,
+    useUser,
+  } from "@account-kit/react";
 
 const shortAddress = (addr: string) => `${addr.slice(0, 10)}...${addr.slice(-5)}`
 
+
+const client = createThirdwebClient({ clientId: "9d8e88833e340a456e0b8f13601d81f7" });
 const data = {
     address: "0x838022424e339deC8f4EF15886e360ccA5ad992A",
     native: {
@@ -13,7 +27,34 @@ const data = {
 }
 
 const Loan: FC = () => {
+    const [addr, setAddr] = useState(""); // Assuming you need to set this address somewhere
+    const [contractData, setContractData] = useState<number>(0);
+    const [isLoading, setIsLoading] = useState(true);
+    const contract = getContract({
+        client,
+        address: "0xE63a7C8843116B4476c1979e4d072041c241A80A",
+        chain: baseSepolia,
+      });
 
+      useEffect(() => {
+        const fetchData = async () => {
+          setIsLoading(true);
+          try {
+            const { data, isLoading: contractLoading } = await useReadContract({
+              contract: contract,
+              method: "function get_credit_worthiness(address user) public view returns (uint256)",
+              params: [addr]
+            });
+            setContractData(Number(data));
+            setIsLoading(contractLoading);
+          } catch (error) {
+            console.error("Error fetching contract data:", error);
+            setIsLoading(false);
+          }
+        };
+        fetchData()
+    },[])
+    const user = useUser()
     const router = useRouter()
 
     return (

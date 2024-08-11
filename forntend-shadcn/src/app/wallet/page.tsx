@@ -11,16 +11,16 @@ export default function Home() {
 
   const router = useRouter()
 
-  const [isSignedIn, setIsSignedin] = useState<boolean>(false);
+  const [isSignedIn, setIsSignedin] = useState<boolean>(true);
   const online = useOnlineStatus();
 
   console.log(online)
 
-  useEffect(() => {
-    const w = getWallet();
-    if (w.isLogined) setIsSignedin(true);
-    if (!w.isLogined) router.push('login');
-  }, []);
+  // useEffect(() => {
+  //   const w = getWallet();
+  //   if (w.isLogined) setIsSignedin(true);
+  //   if (!w.isLogined) router.push('login');
+  // }, []);
 
   return (
     <>

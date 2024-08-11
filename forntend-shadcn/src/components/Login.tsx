@@ -41,18 +41,19 @@ const Login = () => {
 
   const handleClick = async () => {
     //update supabase for email and phonenumber mapping
-    const message = await getMessage();
+    // const message = await getMessage();
     openAuthModal()
     //update supabase for email and phonenumber mapping
 
   }
-  const getMessage = async () => {
+  
+  const getMessage = async (address:string) => {
     const response = await fetch('/api/phone/verify', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      // body: JSON.stringify({ address: user.address })
+      body: JSON.stringify({ address: address })
     }
     );
     const data = await response.json();
@@ -75,6 +76,12 @@ const Login = () => {
               onClick={() => logout()}
             >
               Log out
+            </button>
+            <button
+              className="btn btn-primary mt-6"
+              onClick={() => getMessage(user.address)}
+            >
+              verify
             </button>
           </div>
         </>

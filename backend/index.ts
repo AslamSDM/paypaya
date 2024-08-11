@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import { ethers } from 'ethers';
 import Dispatcherabi from '../contracts/artifacts/contracts/Dispatcher.sol/Dispatcher.json'
-import USDCabi from '../contracts/artifacts/contracts/USDC.sol/USDC.json
+import USDCabi from '../contracts/artifacts/contracts/USDC.sol/USDC.json'
 import { supabase } from './db/supabase';
 import jwt from 'jsonwebtoken';
 import { creditScoreCalculator } from './creditSystem';
@@ -14,7 +14,7 @@ const provider = new ethers.JsonRpcProvider('https://rpc-mumbai.maticvigil.com')
 const wallet = new ethers.Wallet(process.env.PRIVATE_KEY ?? "", provider);
 const signer = wallet.connect(provider);
 const dispatcher = new ethers.Contract(process.env.DISPATCHER_CONTRACT ?? "", Dispatcherabi.abi, signer);
-const USDC = new ethers.Contract(process.env.USDC_CONTRACT ?? "", USDCabi, signer);
+const USDC = new ethers.Contract(process.env.USDC_CONTRACT ?? "", USDCabi.abi, signer);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.get('/', (req, res) => {
   res.send('Hello World!');

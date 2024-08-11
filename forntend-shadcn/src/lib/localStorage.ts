@@ -17,7 +17,7 @@ const getWallet = () => {
     }
 }
 
-const updateWallet = (key: string, value: string) => {
+const updateWallet = (key: string, value: string | boolean) => {
     const wallet = getWallet();
 
     const update = {

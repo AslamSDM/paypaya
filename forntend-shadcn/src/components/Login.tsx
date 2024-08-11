@@ -26,6 +26,7 @@ const countryCodes = {
 }
 
 import { useRouter } from "next/navigation";
+import { updateWallet } from "@/lib/localStorage";
 
 
 const countries = Object.keys(countryCodes);
@@ -59,7 +60,9 @@ const Login = () => {
   useEffect(() => {
     if (user) {
       // getMessage(user.address);
-      if(user.address) router.push('/wallet')
+      updateWallet("isLogined", true);
+      if(user.address) router.push('/wallet');
+      
     }
   }, [])
 

@@ -100,8 +100,8 @@ const Login = () => {
           <div className="flex justify-center items-center w-screen min-h-screen select-none py-[50px]">
             <div className="flex flex-col items-center border h-fit w-[95%] md:w-[80%] lg:w-[40%] border-[#ffffff15] bg-[rgba(31,31,31,0.1)] rounded-[10px] py-[15px]">
               <div className="text-white text-[2em] font-bold my-[40px]">Verify ✍🏻</div>
-              <div className="text-[0.8em]">You are signed in as {user.email ?? "anon"}.</div>
-              <div className="text-[0.8em]">Copy message and send to +91 9220592205 to confirm</div>
+              <div className="text-white text-[0.8em]">You are signed in as {user.email ?? "anon"}.</div>
+              <div className="text-white text-[0.8em]">Copy message and send to +91 9220592205 to confirm</div>
               <div className="">
                 <Input type="text" value={message} disabled onClick={handleCopy} />
               </div>

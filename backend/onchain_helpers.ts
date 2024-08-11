@@ -1,14 +1,20 @@
 
 import { EAS, SchemaEncoder } from "@ethereum-attestation-service/eas-sdk";
 import { ethers } from "ethers";
-
+import {abi} from "./Vault.json"
 
 interface CreditReturn {
     "creditWorthiness": string,
     "creditScore": string
 }
 
-
+interface contractUserDetails{
+    addr:string,
+    newCredit:number,
+    initial_credit_available:number,
+    initial_credit_worthiness:number,
+    world_id_verified_q:boolean
+}
 
 const privateKey = "0xae1c82de859407ab3d6f276ae4424b6230b1c2bef607a1e9d836619da064fea4";
 const url ="https://sepolia.base.org"
@@ -51,3 +57,12 @@ export const setAttestation = async (addr: string, credit_parameters: CreditRetu
         console.log("New attestation UID:", newAttestationUID); return true
     } catch (e) { console.log("Attestation failed with following error ", e); return false }
 }
+
+export const createContractUser=async(props:contractUserDetails)=>{
+
+    const vaultContract = new ethers.Contract("0xE63a7C8843116B4476c1979e4d072041c241A80A", abi, signer);
+    const tx = await vaultContract.create_user(props.addr,ethers.parseEther(String(props.initial_credit_worthiness)),ethers.parseEther(String(props.initial_credit_available)),ethers.parseEther(String(props.world_id_verified_q)));
+    const receipt = await tx.wait();
+    return receipt
+}
+

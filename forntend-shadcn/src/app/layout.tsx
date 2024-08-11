@@ -83,9 +83,11 @@ export default function RootLayout({
         )}
       >
         <main className="dark">
+        <ThirdwebProvider>
           <AlchemyProvider initialState={initialState}>
-            <ThirdwebProvider>{children}</ThirdwebProvider>
+            {children}
           </AlchemyProvider>
+          </ThirdwebProvider>
         </main>
       </body>
     </html>

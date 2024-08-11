@@ -60,12 +60,16 @@ app.post('/sms', async (req, res) => {
 });
 
 app.get('/credit',async (req,res)=>{
-  const {address} = req.query;
+  const {address,isWorldID_verified,isFarcaster_verified} = req.query;
   if(!address) return res.send('Address not found');
 
-  const credit  = await creditScoreCalculator(address as string);
+  const credit  = await creditScoreCalculator({
+    addr: address as string,
+    isWorldID_verified: isWorldID_verified === 'true',
+    isFarcaster_verified: isFarcaster_verified === 'true'
+  });
   return res.send(credit);
-  
+
 })
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

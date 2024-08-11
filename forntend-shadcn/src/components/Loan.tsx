@@ -79,7 +79,7 @@ const Loan: FC = () => {
                 </div>
                 <div className="flex w-[50%] mt-[20px]">
                     <div className="flex justify-center w-full
-                     text-white items-center px-[20px] py-[10px] bg-[#335fff] hover:bg-[#335fff89] rounded-[25px] font-bold text-[1.2em] cursor-pointer" onClick={() => { router.push('loan-input') }}>
+                     text-white items-center px-[20px] py-[10px] bg-[#335fff] hover:bg-[#335fff89] rounded-[25px] font-bold text-[1.2em] cursor-pointer" onClick={() => { router.push('/loan-input') }}>
                         Lend
                     </div>
                 </div>

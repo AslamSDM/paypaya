@@ -10,7 +10,7 @@ import {
 } from "./getChainCredentials";
 import openAI, { OpenAI } from "openai"
 import { SYSTEM_PROMPT } from "./utils/promts";
-
+import { config } from "dotenv";
 
 const GOLDSKY_SUBGRAPH_URL_POAP = "https://api.goldsky.com/api/public/project_clzekg9bg0txc01x8d5seagkd/subgraphs/poap-subgraph/1.0.0/gn"
 const GOLDSKY_SUBGRAPH_URL_UNISWAP = "https://api.goldsky.com/api/public/project_clzekg9bg0txc01x8d5seagkd/subgraphs/uniswapCredibility/1.0.0/gn"
@@ -284,7 +284,7 @@ export async function getWalletReputation(addr: string, chain: string): Promise<
 }
 
 export async function getAICreditScore(credit_params: CreditParams): Promise<CreditReturn | undefined> {
-    const openAI = new OpenAI({ apiKey: "" }) // change to our own
+    const openAI = new OpenAI({ apiKey: process.env.OPENAI_KEY??"" }) // change to our own
     const stream = await openAI.chat.completions.create(
         {
             model: 'gpt-4o-mini',

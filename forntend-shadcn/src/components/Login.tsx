@@ -49,7 +49,7 @@ const Login = () => {
     //update supabase for email and phonenumber mapping
   }
 
-  const handleCopy = (e: { target: HTMLInputElement; }) => {
+  const handleCopy = (e: React.FormEvent<HTMLInputElement>) => {
     if (typeof window !== "undefined") navigator.clipboard.writeText((e.target as HTMLInputElement).value);
   }
 

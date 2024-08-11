@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "pnpm prisma generate"
   },
   "dependencies": {
     "@account-kit/core": "4.0.0-alpha.10",
